@@ -1,0 +1,10 @@
+*.class
+build/
+bin/
+.idea/
+*.iml
+.DS_Store
+*.log
+target/
+.metadata/
+.settings/
