@@ -2,7 +2,7 @@
 Java Swing Application with MySQL Database
 
 ## 👥 Team Members
-- Deem Albassam : Authentication & Core Setup ✅ COMPLETE
+- Deem Albassam : Authentication & Core Setup 
 - Atheer Alotaibi: Book Catalog & Search
 - Rayda Almanie: Borrowing & Returns  
 - Ghala nasser: Reservations & User Management
