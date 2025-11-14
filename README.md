@@ -22,10 +22,6 @@ Java Swing Application with MySQL Database
 4. Run `DatabaseSetup.runFullSetup()` once
 5. Run `LibrarySystem.main()`
 
-### Test Accounts
-- **Librarian:** librarian@library.com / Librarian123!
-- **Member:** john@email.com / Member123!
-
 ## 📁 Project Structure
 library-system/
 ├── .gitignore
