@@ -6,7 +6,7 @@ Java Swing Application with MySQL Database
 - Atheer Alotaibi: Book Catalog & Search
 - Rayda Almanie: Borrowing & Returns  
 - Ghala nasser: Reservations & User Management
-- Person 5: Admin Features & Reporting
+- Jory Almutairi: Admin Features & Reporting
 
 ## 🚀 Quick Start
 
