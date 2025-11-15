@@ -40,4 +40,3 @@ library-system/
 ├── FinalAuthTest.java # Comprehensive authentication tests
 ├── PasswordChangeTest.java # Password change functionality tests
 ├── SimplePasswordTest.java # Basic password utility tests
-└── BCryptTest.java # Legacy hash testing
