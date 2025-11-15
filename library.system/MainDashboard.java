@@ -375,51 +375,12 @@ public class MainDashboard {
         return panel;
     }
     
-    // Member-specific panels
+    //  عدلت عليه
     
     private JPanel createSearchPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        
-        JLabel titleLabel = new JLabel("Search Books", JLabel.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        panel.add(titleLabel, BorderLayout.NORTH);
-        
-        JPanel searchPanel = new JPanel(new FlowLayout());
-        searchPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        
-        JTextField searchField = new JTextField(25);
-        JButton searchButton = createStyledButton("Search", new Color(70, 130, 180));
-        JComboBox<String> searchType = new JComboBox<>(new String[]{"Title", "Author", "ISBN", "Category"});
-        
-        searchButton.addActionListener(e -> {
-            String query = searchField.getText().trim();
-            String type = (String) searchType.getSelectedItem();
-            if (!query.isEmpty()) {
-                showComingSoon("Book Search: " + type + " - '" + query + "'");
-            } else {
-                JOptionPane.showMessageDialog(panel, "Please enter a search term.", "Search Error", JOptionPane.WARNING_MESSAGE);
-            }
-        });
-        
-        searchPanel.add(new JLabel("Search by:"));
-        searchPanel.add(searchType);
-        searchPanel.add(searchField);
-        searchPanel.add(searchButton);
-        
-        panel.add(searchPanel, BorderLayout.NORTH);
-        
-        // Add some sample search results area
-        JTextArea resultsArea = new JTextArea(15, 60);
-        resultsArea.setEditable(false);
-        resultsArea.setText("Search results will appear here...\n\nTry searching for books by title, author, ISBN, or category.");
-        resultsArea.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        JScrollPane scrollPane = new JScrollPane(resultsArea);
-        
-        panel.add(scrollPane, BorderLayout.CENTER);
-        return panel;
-    }
-    
+    return new BookCatalogPanel();
+}
+    /*LLLLLLLLLLLLlllllllllllllllllllllllllllllllllllllllll*/
     private JPanel createMyLoansPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
