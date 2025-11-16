@@ -300,11 +300,26 @@ public class MainDashboard {
         JButton returnBtn = createStyledButton("Return Book", new Color(60, 179, 113));
         JButton renewBtn = createStyledButton("Renew Loan", new Color(218, 165, 32));
         JButton viewLoansBtn = createStyledButton("View All Loans", new Color(186, 85, 211));
-        
-        checkoutBtn.addActionListener(e -> showComingSoon("Check Out Book"));
-        returnBtn.addActionListener(e -> showComingSoon("Return Book"));
-        renewBtn.addActionListener(e -> showComingSoon("Renew Loan"));
-        viewLoansBtn.addActionListener(e -> showComingSoon("View All Loans"));
+
+        checkoutBtn.addActionListener(e -> new CheckoutUI());
+        returnBtn.addActionListener(e -> new ReturnUI());
+
+        renewBtn.addActionListener(e -> {
+
+            String loanIdInput = JOptionPane.showInputDialog(frame, "Enter Loan ID to renew:");
+            if (loanIdInput != null && !loanIdInput.trim().isEmpty()) {
+                try {
+                    int loanId = Integer.parseInt(loanIdInput);
+                    BorrowingService service = new BorrowingService();
+                    String result = service.renewLoan(loanId);
+                    JOptionPane.showMessageDialog(frame, result, "Renewal Status", JOptionPane.INFORMATION_MESSAGE);
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(frame, "Invalid Loan ID format.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        viewLoansBtn.addActionListener(e -> new ViewAllLoansUI());
         
         contentPanel.add(checkoutBtn);
         contentPanel.add(returnBtn);
