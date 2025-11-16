@@ -14,7 +14,7 @@ public class BorrowingService {
     private static final int LOAN_PERIOD_DAYS = 14;
 
     /**
-     * Calculates the due date by adding the standard loan period (14 days) to the current date.
+     * Calculates the due date by adding 14 days to the current date.
      */
     private Date calculateDueDate() {
         Calendar cal = Calendar.getInstance();
@@ -40,7 +40,7 @@ public class BorrowingService {
                 return "FAIL: Book is currently not available or ID is invalid.";
             }
 
-            // 2. Check for active loan (prevent duplicate checkout of the same book by the same user)
+            // 2. Check for active loan (prevent duplicate checkout)
             String checkActiveLoanSql = "SELECT loanId FROM Loans WHERE bookId = ? AND userId = ? AND isReturned = 0";
             PreparedStatement checkLoanStmt = conn.prepareStatement(checkActiveLoanSql);
             checkLoanStmt.setInt(1, bookId);
@@ -73,7 +73,7 @@ public class BorrowingService {
     }
 
     /**
-     *  Records the return of a book by a member.
+     * Records the return of a book by a member.
      * Updates the loan record and increments available copies.
      */
     public String returnBook(int bookId, int userId) {
@@ -91,7 +91,7 @@ public class BorrowingService {
             }
 
             int loanId = rs.getInt("loanId");
-            // Timestamp dueDate = rs.getTimestamp("dueDate"); // Used later for fine calculation (Person 5)
+            // Timestamp dueDate = rs.getTimestamp("dueDate");
             Date returnDate = new Date();
             long fine = 0;
 
@@ -117,7 +117,7 @@ public class BorrowingService {
     }
 
     /**
-     *  Renews an active loan, extending the due date by 14 days.
+     * Renews an active loan, extending the due date by 14 days.
      */
     public String renewLoan(int loanId) {
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -152,6 +152,48 @@ public class BorrowingService {
         } catch (SQLException e) {
             System.err.println("Database error during renewal: " + e.getMessage());
             return "ERROR: Database access failed.";
+        }
+    }
+
+
+
+    public String[][] getAllLoansData() {
+        // Uses a fixed size array as a simple approach for small projects.
+        String[][] data = new String[100][6];
+        int row = 0;
+
+        // SQL to join loans, books, and users tables
+        String selectAllLoansSql = "SELECT l.loanId, b.title, u.name, l.loanDate, l.dueDate, l.isReturned " +
+                "FROM Loans l JOIN Books b ON l.bookId = b.bookId " +
+                "JOIN Users u ON l.userId = u.userId ORDER BY l.loanDate DESC";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement selectStmt = conn.prepareStatement(selectAllLoansSql);
+             ResultSet rs = selectStmt.executeQuery()) {
+
+            while (rs.next() && row < data.length) {
+                String status = rs.getBoolean("isReturned") ? "Returned" : "Active";
+
+                // Populate row data: Loan ID, Title, Member, Loan Date, Due Date, Status
+                data[row] = new String[]{
+                        String.valueOf(rs.getInt("loanId")),
+                        rs.getString("title"),
+                        rs.getString("name"),
+                        rs.getTimestamp("loanDate").toString().substring(0, 10),
+                        rs.getTimestamp("dueDate").toString().substring(0, 10),
+                        status
+                };
+                row++;
+            }
+
+            // Return array resized to actual data length
+            String[][] actualData = new String[row][6];
+            System.arraycopy(data, 0, actualData, 0, row);
+            return actualData;
+
+        } catch (SQLException e) {
+            System.err.println("Database error retrieving all loans: " + e.getMessage());
+            return new String[0][0]; // Return empty array on error
         }
     }
 }
