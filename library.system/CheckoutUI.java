@@ -74,4 +74,5 @@ public class CheckoutUI extends JFrame {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Access Denied", JOptionPane.ERROR_MESSAGE);
         }
     }
+
 }
