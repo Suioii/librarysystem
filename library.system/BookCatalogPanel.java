@@ -32,13 +32,15 @@ public class BookCatalogPanel extends JPanel {
 
         JButton searchBtn = new JButton("Search");
         JButton clearBtn = new JButton("Clear");
-
+        JButton holdButton = new JButton("Place Hold");// add from person 4
+        
         top.add(new JLabel("Search: "));
         top.add(searchField);
         top.add(searchType);
         top.add(searchBtn);
         top.add(clearBtn);
-
+        top.add(holdButton);//add from person4
+        
         add(top, BorderLayout.NORTH);
 
         model = new DefaultTableModel(new Object[]{"ISBN", "Title", "Author", "Category", "Available"}, 0) {
@@ -57,7 +59,48 @@ public class BookCatalogPanel extends JPanel {
             searchField.setText("");
             model.setRowCount(0);
         });
+        // add from person4
+         holdButton.addActionListener(e -> {
+    int row = resultTable.getSelectedRow();
+    if (row == -1) {
+        JOptionPane.showMessageDialog(this, "Please select a book first.", 
+                "No Selection", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
 
+    int modelRow = resultTable.convertRowIndexToModel(row);
+ 
+    String isbn = model.getValueAt(modelRow, 0).toString();
+
+    Book book = null;
+    try {
+        java.util.List<Book> books = bookService.searchBooks(isbn, "ISBN");
+        if (!books.isEmpty()) {
+            book = books.get(0);
+        }
+    } catch (Exception ex) {
+        ex.printStackTrace();
+    }
+
+    if (book == null) {
+        JOptionPane.showMessageDialog(this, "Cannot find book details.", 
+                "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    User current = SessionManager.getInstance().getCurrentUser();
+    if (current == null) {
+        JOptionPane.showMessageDialog(this, "Please log in first.", 
+                "Not Logged In", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    String result = ReservationService.placeHold(book.getBookId(), current.getMemberId());
+    JOptionPane.showMessageDialog(this, result, 
+            "Place Hold", JOptionPane.INFORMATION_MESSAGE);
+});
+        // add from person4
+        
         searchField.getDocument().addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) { performSearch(); }
             public void removeUpdate(DocumentEvent e) { performSearch(); }

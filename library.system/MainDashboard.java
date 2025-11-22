@@ -271,9 +271,15 @@ public class MainDashboard {
         JButton searchMembersBtn = createStyledButton("Search Members", new Color(218, 165, 32));
         JButton manageFinesBtn = createStyledButton("Manage Fines", new Color(186, 85, 211));
         
-        addMemberBtn.addActionListener(e -> showComingSoon("Add New Member"));
-        viewMembersBtn.addActionListener(e -> showComingSoon("View All Members"));
-        searchMembersBtn.addActionListener(e -> showComingSoon("Search Members"));
+        //addMemberBtn.addActionListener(e -> showComingSoon("Add New Member"));// عدلته بالسطر اللي بعده 
+        addMemberBtn.addActionListener(e -> new MemberRegistrationUI()); // from person 4
+
+        //viewMembersBtn.addActionListener(e -> showComingSoon("View All Members"));// عدلته بالسطر اللي بعده
+        viewMembersBtn.addActionListener(e -> new MemberListUI()); // PERSON4: 
+
+        //searchMembersBtn.addActionListener(e -> showComingSoon("Search Members"));//عدلته بالسطر اللي بعده
+        searchMembersBtn.addActionListener(e -> new MemberSearchUI()); // PERSON4
+
         manageFinesBtn.addActionListener(e -> showComingSoon("Manage Fines"));
         
         contentPanel.add(addMemberBtn);
@@ -300,7 +306,8 @@ public class MainDashboard {
         JButton returnBtn = createStyledButton("Return Book", new Color(60, 179, 113));
         JButton renewBtn = createStyledButton("Renew Loan", new Color(218, 165, 32));
         JButton viewLoansBtn = createStyledButton("View All Loans", new Color(186, 85, 211));
-
+        JButton viewHoldQueueBtn = createStyledButton("View Hold Queue", new Color(123, 104, 238)); // add from person4
+  
         checkoutBtn.addActionListener(e -> new CheckoutUI());
         returnBtn.addActionListener(e -> new ReturnUI());
 
@@ -320,12 +327,14 @@ public class MainDashboard {
         });
 
         viewLoansBtn.addActionListener(e -> new ViewAllLoansUI());
-        
+        viewHoldQueueBtn.addActionListener(e -> new HoldQueueUI());// add from person4
+
         contentPanel.add(checkoutBtn);
         contentPanel.add(returnBtn);
         contentPanel.add(renewBtn);
         contentPanel.add(viewLoansBtn);
-        
+        contentPanel.add(viewHoldQueueBtn); // add from person4
+
         panel.add(contentPanel, BorderLayout.CENTER);
         return panel;
     }
@@ -423,30 +432,54 @@ public class MainDashboard {
     }
     
     private JPanel createMyHoldsPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        
-        JLabel titleLabel = new JLabel("My Holds/Reservations", JLabel.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        panel.add(titleLabel, BorderLayout.NORTH);
-        
-        // Create a table for holds
-        String[] columnNames = {"Book Title", "Author", "Position in Queue", "Status"};
-        Object[][] data = {
-            {"No active holds", "-", "-", "-"}
-        };
-        
-        JTable holdsTable = new JTable(data, columnNames);
-        holdsTable.setEnabled(false);
-        JScrollPane scrollPane = new JScrollPane(holdsTable);
-        
-        JPanel infoPanel = new JPanel(new BorderLayout());
-        infoPanel.add(new JLabel("You have 0 active holds."), BorderLayout.NORTH);
-        infoPanel.add(scrollPane, BorderLayout.CENTER);
-        
-        panel.add(infoPanel, BorderLayout.CENTER);
+    JPanel panel = new JPanel(new BorderLayout());
+    panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+    JLabel titleLabel = new JLabel("My Holds / Reservations", JLabel.CENTER);
+    titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+    panel.add(titleLabel, BorderLayout.NORTH);
+
+    SessionManager session = SessionManager.getInstance();
+    User current = session.getCurrentUser();
+
+    if (current == null) {
+        panel.add(new JLabel("You must be logged in to view your holds.", JLabel.CENTER),
+                  BorderLayout.CENTER);
         return panel;
     }
+
+    int memberId = current.getMemberId();
+
+    String[][] data = ReservationService.getHoldsForMemberTableData(memberId);
+
+    String[] columnNames = {"Hold ID", "Book Title", "Status", "Placed At"};
+
+    JTable holdsTable = new JTable(data, columnNames) {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
+    holdsTable.setRowHeight(24);
+
+    JScrollPane scrollPane = new JScrollPane(holdsTable);
+
+    JPanel infoPanel = new JPanel(new BorderLayout());
+    JLabel infoLabel;
+
+    if (data.length == 0) {
+        infoLabel = new JLabel("You have 0 active holds.", JLabel.LEFT);
+    } else {
+        infoLabel = new JLabel("You currently have " + data.length + " hold(s).", JLabel.LEFT);
+    }
+
+    infoPanel.add(infoLabel, BorderLayout.NORTH);
+    infoPanel.add(scrollPane, BorderLayout.CENTER);
+
+    panel.add(infoPanel, BorderLayout.CENTER);
+    return panel;
+}
+
     
 private JPanel createMyAccountPanel() {
     JPanel panel = new JPanel(new BorderLayout());

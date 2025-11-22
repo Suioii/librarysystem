@@ -8,3 +8,5 @@ bin/
 target/
 .metadata/
 .settings/
+/librarysystem/nbproject/private/
+/librarysystem/dist/
