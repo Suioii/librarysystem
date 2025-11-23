@@ -5,23 +5,26 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
 public class CheckoutUI extends JFrame {
 
     private final BorrowingService borrowingService = new BorrowingService();
     private final JTextField bookIdField = new JTextField(10);
-    private final JTextField userIdField = new JTextField(10);
+    private final JTextField memberIdField = new JTextField(10); // CHANGED: userIdField → memberIdField
     private final JButton checkoutButton = new JButton("Check Out Book");
 
     public CheckoutUI() {
         setTitle("Check Out Book - Librarian");
         setSize(350, 200);
-        // Use DISPOSE_ON_CLOSE to only close this window, not the whole application
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Ensure only Librarians can access this screen (Assumed role is "LIBRARIAN")
-        // SessionManager.getInstance().validateAccess("LIBRARIAN");
+        // ADDED: Verify librarian access
+        SessionManager session = SessionManager.getInstance();
+        if (!session.isLoggedIn() || !session.isLibrarian()) {
+            JOptionPane.showMessageDialog(null, "Access denied: Librarian privileges required.", "Access Denied", JOptionPane.ERROR_MESSAGE);
+            dispose();
+            return;
+        }
 
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -34,11 +37,11 @@ public class CheckoutUI extends JFrame {
         gbc.gridx = 1; gbc.gridy = 0;
         add(bookIdField, gbc);
 
-        // Member ID Input
+        // Member ID Input - CHANGED: "User ID" → "Member ID"
         gbc.gridx = 0; gbc.gridy = 1;
-        add(new JLabel("Member ID:"), gbc);
+        add(new JLabel("Member ID:"), gbc); // CHANGED: Label text
         gbc.gridx = 1; gbc.gridy = 1;
-        add(userIdField, gbc);
+        add(memberIdField, gbc); // CHANGED: Field variable
 
         // Checkout Button
         gbc.gridx = 0; gbc.gridy = 2;
@@ -58,21 +61,24 @@ public class CheckoutUI extends JFrame {
         try {
             // Validate inputs are numbers
             int bookId = Integer.parseInt(bookIdField.getText());
-            int userId = Integer.parseInt(userIdField.getText());
+            int memberId = Integer.parseInt(memberIdField.getText()); // CHANGED: userId → memberId
 
             // Call the core service logic
-            String result = borrowingService.checkOutBook(bookId, userId);
+            String result = borrowingService.checkOutBook(bookId, memberId); // CHANGED: parameter name
 
             // Display result to the librarian
             JOptionPane.showMessageDialog(this, result,
                     "Checkout Status",
                     result.startsWith("SUCCESS") ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.ERROR_MESSAGE);
 
+            // Clear fields on success
+            if (result.startsWith("SUCCESS")) {
+                bookIdField.setText("");
+                memberIdField.setText("");
+            }
+
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Please enter valid numbers for IDs.", "Input Error", JOptionPane.WARNING_MESSAGE);
-        } catch (SecurityException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Access Denied", JOptionPane.ERROR_MESSAGE);
         }
     }
-
 }
