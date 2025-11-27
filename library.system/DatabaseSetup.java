@@ -5,7 +5,10 @@ import java.sql.Statement;
 import java.sql.PreparedStatement;
 
 public class DatabaseSetup {
-    
+   public static void main (String[] args){
+           runFullSetup();
+
+   } 
     public static void runFullSetup() {
         createTables();
         insertSampleData();
