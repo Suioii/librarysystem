@@ -34,7 +34,6 @@ public class HoldQueueUI extends JFrame {
 
         add(top, BorderLayout.NORTH);
 
-        // جدول يعرض طابور الحجز
         model = new DefaultTableModel(
                 new Object[]{"Queue Pos", "Hold ID", "Member ID", "Placed At", "Status"}, 0) {
             @Override
@@ -49,7 +48,6 @@ public class HoldQueueUI extends JFrame {
 
         add(new JScrollPane(table), BorderLayout.CENTER);
 
-        // زر تحميل الطابور
         loadBtn.addActionListener(e -> loadQueue());
     }
 
@@ -78,12 +76,13 @@ public class HoldQueueUI extends JFrame {
 
         for (Hold h : queue) {
             model.addRow(new Object[]{
-                    h.getQueuePosition(),  // ترتيب الانتظار
-                    h.getHoldId(),        // رقم الحجز
-                    h.getMemberId(),      // رقم العضو
-                    h.getPlaceDate(),     // وقت الحجز
-                    h.getStatus()         // الحالة: PENDING / READY / CANCELLED
+                    h.getQueuePosition(), 
+                    h.getHoldId(),        
+                    h.getMemberId(),   
+                    h.getPlaceDate(),     
+                    h.getStatus()         
             });
         }
     }
 }
+
