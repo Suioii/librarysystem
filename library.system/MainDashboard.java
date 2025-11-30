@@ -251,52 +251,58 @@ public class MainDashboard {
         return panel;
     }
     
-    private JPanel createLoanManagementPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        
-        JLabel titleLabel = new JLabel("Loan Management", JLabel.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        panel.add(titleLabel, BorderLayout.NORTH);
-        
-        JPanel contentPanel = new JPanel(new GridLayout(0, 2, 15, 15));
-        contentPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
-        
-        JButton checkoutBtn = createStyledButton("Check Out Book", new Color(70, 130, 180));
-        JButton returnBtn = createStyledButton("Return Book", new Color(60, 179, 113));
-        JButton renewBtn = createStyledButton("Renew Loan", new Color(218, 165, 32));
-        JButton viewLoansBtn = createStyledButton("View All Loans", new Color(186, 85, 211));
-        JButton viewHoldQueueBtn = createStyledButton("View Hold Queue", new Color(123, 104, 238));
-  
-        checkoutBtn.addActionListener(e -> new CheckoutUI());
-        returnBtn.addActionListener(e -> new ReturnUI());
-
-        renewBtn.addActionListener(e -> {
-            String loanIdInput = JOptionPane.showInputDialog(frame, "Enter Loan ID to renew:");
-            if (loanIdInput != null && !loanIdInput.trim().isEmpty()) {
-                try {
-                    int loanId = Integer.parseInt(loanIdInput);
-                    BorrowingService service = new BorrowingService();
-                    String result = service.renewLoan(loanId);
-                    JOptionPane.showMessageDialog(frame, result, "Renewal Status", JOptionPane.INFORMATION_MESSAGE);
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(frame, "Invalid Loan ID format.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+private JPanel createLoanManagementPanel() {
+    JPanel panel = new JPanel(new BorderLayout());
+    panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+    
+    JLabel titleLabel = new JLabel("Loan Management", JLabel.CENTER);
+    titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+    panel.add(titleLabel, BorderLayout.NORTH);
+    
+    JPanel contentPanel = new JPanel(new GridLayout(0, 2, 15, 15));
+    contentPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
+    
+    // EXISTING BUTTONS WITH YOUR ACTUAL ACTION LISTENERS:
+    JButton checkoutBtn = createStyledButton("Check Out Book", new Color(70, 130, 180));
+    JButton returnBtn = createStyledButton("Return Book", new Color(60, 179, 113));
+    JButton renewBtn = createStyledButton("Renew Loan", new Color(218, 165, 32));
+    JButton viewLoansBtn = createStyledButton("View All Loans", new Color(186, 85, 211));
+    JButton viewHoldQueueBtn = createStyledButton("View Hold Queue", new Color(123, 104, 238));
+    
+    // KEEP YOUR EXISTING ACTION LISTENERS:
+    checkoutBtn.addActionListener(e -> new CheckoutUI());
+    returnBtn.addActionListener(e -> new ReturnUI());
+    renewBtn.addActionListener(e -> {
+        String loanIdInput = JOptionPane.showInputDialog(frame, "Enter Loan ID to renew:");
+        if (loanIdInput != null && !loanIdInput.trim().isEmpty()) {
+            try {
+                int loanId = Integer.parseInt(loanIdInput);
+                BorrowingService service = new BorrowingService();
+                String result = service.renewLoan(loanId);
+                JOptionPane.showMessageDialog(frame, result, "Renewal Status", JOptionPane.INFORMATION_MESSAGE);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(frame, "Invalid Loan ID format.", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        });
-
-        viewLoansBtn.addActionListener(e -> new ViewAllLoansUI());
-        viewHoldQueueBtn.addActionListener(e -> new HoldQueueUI());
-
-        contentPanel.add(checkoutBtn);
-        contentPanel.add(returnBtn);
-        contentPanel.add(renewBtn);
-        contentPanel.add(viewLoansBtn);
-        contentPanel.add(viewHoldQueueBtn);
-
-        panel.add(contentPanel, BorderLayout.CENTER);
-        return panel;
-    }
+        }
+    });
+    viewLoansBtn.addActionListener(e -> new ViewAllLoansUI());
+    viewHoldQueueBtn.addActionListener(e -> new HoldQueueUI());
+    
+    // ADD THE NEW FINES BUTTON:
+    JButton manageFinesBtn = createStyledButton("Manage Fines", new Color(255, 100, 100));
+    manageFinesBtn.addActionListener(e -> new ManageFinesUI().setVisible(true));
+    
+    // ADD ALL BUTTONS TO CONTENT PANEL:
+    contentPanel.add(checkoutBtn);
+    contentPanel.add(returnBtn);
+    contentPanel.add(renewBtn);
+    contentPanel.add(viewLoansBtn);
+    contentPanel.add(viewHoldQueueBtn);
+    contentPanel.add(manageFinesBtn);  // ADD THIS LINE
+    
+    panel.add(contentPanel, BorderLayout.CENTER);
+    return panel;
+}
     
     private JPanel createReportsPanel() {
         JPanel panel = new JPanel(new BorderLayout());
@@ -510,3 +516,4 @@ public class MainDashboard {
         }
     }
 }
+
