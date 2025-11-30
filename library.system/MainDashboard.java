@@ -205,10 +205,12 @@ public class MainDashboard {
         
         addBookBtn.addActionListener(e -> new ManageBooksUI().setVisible(true));
         
-        searchBooksBtn.addActionListener(e -> showComingSoon("Search Books"));
-        manageCopiesBtn.addActionListener(e -> showComingSoon("Manage Copies"));
-        viewAllBooksBtn.addActionListener(e -> showComingSoon("View All Books"));
-        
+        searchBooksBtn.addActionListener(e -> new SearchBooksUI().setVisible(true));
+    
+       manageCopiesBtn.addActionListener(e -> new ManageBookCopiesUI().setVisible(true));
+    
+    viewAllBooksBtn.addActionListener(e -> new ViewAllBooksUI().setVisible(true));
+
         contentPanel.add(addBookBtn);
         contentPanel.add(searchBooksBtn);
         contentPanel.add(manageCopiesBtn);
