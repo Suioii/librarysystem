@@ -32,14 +32,14 @@ public class BookCatalogPanel extends JPanel {
 
         JButton searchBtn = new JButton("Search");
         JButton clearBtn = new JButton("Clear");
-        JButton holdButton = new JButton("Place Hold");// add from person 4
+        JButton holdButton = new JButton("Place Hold");
         
         top.add(new JLabel("Search: "));
         top.add(searchField);
         top.add(searchType);
         top.add(searchBtn);
         top.add(clearBtn);
-        top.add(holdButton);//add from person4
+        top.add(holdButton);
         
         add(top, BorderLayout.NORTH);
 
@@ -59,7 +59,6 @@ public class BookCatalogPanel extends JPanel {
             searchField.setText("");
             model.setRowCount(0);
         });
-        // add from person4
          holdButton.addActionListener(e -> {
     int row = resultTable.getSelectedRow();
     if (row == -1) {
@@ -99,7 +98,6 @@ public class BookCatalogPanel extends JPanel {
     JOptionPane.showMessageDialog(this, result, 
             "Place Hold", JOptionPane.INFORMATION_MESSAGE);
 });
-        // add from person4
         
         searchField.getDocument().addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) { performSearch(); }
