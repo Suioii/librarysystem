@@ -7,7 +7,7 @@ import java.util.List;
 
 public class MemberSearchUI extends JFrame {
 
-    private MemberService memberService = new MemberService(); // PERSON4
+    private MemberService memberService = new MemberService(); 
     private JTextField searchField;
     private JTable resultsTable;
     private DefaultTableModel model;
@@ -68,7 +68,6 @@ public class MemberSearchUI extends JFrame {
         JScrollPane scroll = new JScrollPane(resultsTable);
         add(scroll, BorderLayout.CENTER);
 
-        // الأحداث
         searchBtn.addActionListener(e -> doSearch());
         clearBtn.addActionListener(e -> {
             searchField.setText("");
@@ -109,3 +108,4 @@ public class MemberSearchUI extends JFrame {
         }
     }
 }
+
