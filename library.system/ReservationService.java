@@ -183,7 +183,6 @@ public class ReservationService {
 
         return holds;
     }
-    // PERSON4: إرجاع بيانات الحجوزات لعضو معيّن على شكل جدول
 public static String[][] getHoldsForMemberTableData(int memberId) {
     java.util.List<String[]> rows = new java.util.ArrayList<>();
 
@@ -217,3 +216,4 @@ public static String[][] getHoldsForMemberTableData(int memberId) {
 }
 
 }
+
