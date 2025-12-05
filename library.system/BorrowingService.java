@@ -10,9 +10,7 @@ public class BorrowingService {
 
     private static final int LOAN_PERIOD_DAYS = 14;
 
-    /**
-     * Check out a book using the CORRECT database schema
-     */
+    
     public String checkOutBook(int bookId, int memberId) {
         try (Connection conn = DatabaseConnection.getConnection()) {
             
@@ -62,9 +60,7 @@ public class BorrowingService {
         }
     }
     
-    /**
-     * Return a book using CORRECT schema
-     */
+   
     public String returnBook(int bookId, int memberId) {
         try (Connection conn = DatabaseConnection.getConnection()) {
             
@@ -96,13 +92,11 @@ public class BorrowingService {
             updateCopyStmt.setInt(1, copyId);
             updateCopyStmt.executeUpdate();
             
-            //update from person4
             Hold nextHold = ReservationService.promoteNextHoldToReady(bookId);
             if (nextHold != null) {
               System.out.println("Next hold for book #" + bookId +
                        " is now READY for member #" + nextHold.getMemberId());
               }
-            //update from person4
             
             return "SUCCESS: Book returned successfully.";
             
@@ -112,9 +106,7 @@ public class BorrowingService {
         }
     }
     
-    /**
-     * Renew loan using CORRECT schema
-     */
+    
     public String renewLoan(int loanId) {
         try (Connection conn = DatabaseConnection.getConnection()) {
             
@@ -153,9 +145,7 @@ public class BorrowingService {
         }
     }
     
-    /**
-     * Get all loans data using CORRECT schema
-     */
+   
     public String[][] getAllLoansData() {
         List<String[]> loanData = new ArrayList<>();
         
