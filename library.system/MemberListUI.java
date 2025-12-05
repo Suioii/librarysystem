@@ -83,7 +83,7 @@ public class MemberListUI extends JFrame {
 
         add(bottomPanel, BorderLayout.SOUTH);
 
-        editBtn.addActionListener(e -> openEditDialog()); // PERSON4
+        editBtn.addActionListener(e -> openEditDialog()); 
         searchBtn.addActionListener(e -> searchMembers());
         clearBtn.addActionListener(e -> {
             searchField.setText("");
@@ -97,7 +97,7 @@ public class MemberListUI extends JFrame {
 
     private void loadAllMembers() {
         model.setRowCount(0);
-        List<User> members = memberService.getAllMembers(); // PERSON4
+        List<User> members = memberService.getAllMembers(); 
 
         for (User u : members) {
             model.addRow(new Object[]{
@@ -118,7 +118,7 @@ public class MemberListUI extends JFrame {
         }
 
         model.setRowCount(0);
-        List<User> members = memberService.searchMembers(keyword); // PERSON4
+        List<User> members = memberService.searchMembers(keyword); 
 
         if (members.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No members found matching your search.",
@@ -160,7 +160,7 @@ public class MemberListUI extends JFrame {
             return;
         }
 
-        boolean ok = memberService.setMemberActive(memberId, active); // PERSON4
+        boolean ok = memberService.setMemberActive(memberId, active); 
 
         if (ok) {
             JOptionPane.showMessageDialog(this,
@@ -188,7 +188,6 @@ public class MemberListUI extends JFrame {
     int modelRow = membersTable.convertRowIndexToModel(selected);
     int memberId = (int) model.getValueAt(modelRow, 0);
 
-    // نجيب بيانات العضو من MemberService
     User member = memberService.getMemberById(memberId);
     if (member == null) {
         JOptionPane.showMessageDialog(this,
@@ -204,3 +203,4 @@ public class MemberListUI extends JFrame {
     loadAllMembers();
 }
 }
+
