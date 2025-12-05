@@ -9,7 +9,7 @@ public class CheckoutUI extends JFrame {
 
     private final BorrowingService borrowingService = new BorrowingService();
     private final JTextField bookIdField = new JTextField(10);
-    private final JTextField memberIdField = new JTextField(10); // CHANGED: userIdField → memberIdField
+    private final JTextField memberIdField = new JTextField(10); 
     private final JButton checkoutButton = new JButton("Check Out Book");
 
     public CheckoutUI() {
@@ -18,7 +18,6 @@ public class CheckoutUI extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // ADDED: Verify librarian access
         SessionManager session = SessionManager.getInstance();
         if (!session.isLoggedIn() || !session.isLibrarian()) {
             JOptionPane.showMessageDialog(null, "Access denied: Librarian privileges required.", "Access Denied", JOptionPane.ERROR_MESSAGE);
@@ -31,19 +30,16 @@ public class CheckoutUI extends JFrame {
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Book ID Input
         gbc.gridx = 0; gbc.gridy = 0;
         add(new JLabel("Book ID:"), gbc);
         gbc.gridx = 1; gbc.gridy = 0;
         add(bookIdField, gbc);
 
-        // Member ID Input - CHANGED: "User ID" → "Member ID"
         gbc.gridx = 0; gbc.gridy = 1;
-        add(new JLabel("Member ID:"), gbc); // CHANGED: Label text
+        add(new JLabel("Member ID:"), gbc); 
         gbc.gridx = 1; gbc.gridy = 1;
-        add(memberIdField, gbc); // CHANGED: Field variable
+        add(memberIdField, gbc); 
 
-        // Checkout Button
         gbc.gridx = 0; gbc.gridy = 2;
         gbc.gridwidth = 2;
         checkoutButton.addActionListener(new ActionListener() {
@@ -59,19 +55,15 @@ public class CheckoutUI extends JFrame {
 
     private void handleCheckout() {
         try {
-            // Validate inputs are numbers
             int bookId = Integer.parseInt(bookIdField.getText());
-            int memberId = Integer.parseInt(memberIdField.getText()); // CHANGED: userId → memberId
+            int memberId = Integer.parseInt(memberIdField.getText()); 
 
-            // Call the core service logic
-            String result = borrowingService.checkOutBook(bookId, memberId); // CHANGED: parameter name
+            String result = borrowingService.checkOutBook(bookId, memberId); 
 
-            // Display result to the librarian
             JOptionPane.showMessageDialog(this, result,
                     "Checkout Status",
                     result.startsWith("SUCCESS") ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.ERROR_MESSAGE);
 
-            // Clear fields on success
             if (result.startsWith("SUCCESS")) {
                 bookIdField.setText("");
                 memberIdField.setText("");
