@@ -160,7 +160,7 @@ private void handleLogin() {
 private void openMainApplication(User user) {
     // Close login window and open main dashboard
     frame.dispose();
-    new MainDashboard().show(); // No parameter needed - gets user from session
+    new MainDashboard().show(); 
 }
     
     public void show() {
@@ -176,4 +176,5 @@ private void openMainApplication(User user) {
             }
         });
     }
+
 }
