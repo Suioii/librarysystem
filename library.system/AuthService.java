@@ -75,7 +75,7 @@ public class AuthService {
             pstmt.setString(1, name);
             pstmt.setString(2, email);
             pstmt.setString(3, hashedPassword); // Store the hashed password
-            pstmt.setString(4, "MEMBER"); // Always set as MEMBER for registration
+            pstmt.setString(4, "MEMBER");
             
             int rowsAffected = pstmt.executeUpdate();
             return rowsAffected > 0;
@@ -112,9 +112,9 @@ public class AuthService {
         String passwordRegex = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$";
         return Pattern.compile(passwordRegex).matcher(password).matches();
     }
-    /**
- * Verify the current password for a user
- */
+    
+ // Verify the current password for a user
+
 public static boolean verifyCurrentPassword(String email, String currentPassword) {
     String sql = "SELECT password_hash FROM members WHERE email = ? AND is_active = true";
     
@@ -134,9 +134,8 @@ public static boolean verifyCurrentPassword(String email, String currentPassword
     return false;
 }
 
-/**
- * Change user password
- */
+ //Change user password
+ 
 public static boolean changePassword(String email, String newPassword) {
     // Validate new password strength
     if (!PasswordUtils.isPasswordStrong(newPassword)) {
@@ -171,3 +170,4 @@ public static boolean changePassword(String email, String newPassword) {
     }
 }
 }
+
