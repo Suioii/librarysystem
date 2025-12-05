@@ -70,7 +70,7 @@ public class ViewReportsUI extends JFrame {
 
             String query = "SELECT b.title, m.name, l.due_date " +
                            "FROM loans l " +
-                           "JOIN books b ON l.copy_id = b.book_id " + // Note: assuming simplified copy_id link for report
+                           "JOIN books b ON l.copy_id = b.book_id " + 
                            "JOIN members m ON l.member_id = m.member_id " +
                            "WHERE l.return_date IS NULL";
 
@@ -103,4 +103,5 @@ public class ViewReportsUI extends JFrame {
             }
         }
     }
+
 }
